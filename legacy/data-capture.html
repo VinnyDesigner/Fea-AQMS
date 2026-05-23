@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Capture Rate - AQMS</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* Background inherited from main.css */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .page-title h1 {
+      font-size: 1.5rem;
+      color: var(--color-text-main);
+    }
+    
+    .page-title p {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .filters-bar {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .table-card {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .sub-tabs {
+      display: inline-flex;
+      background: rgba(255,255,255,0.6);
+      border-radius: 9999px;
+      padding: 0.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .sub-tab {
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--color-text-main);
+    }
+    
+    .sub-tab.active {
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Table Styles */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 1rem 0.5rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .data-table td {
+      padding: 1rem 0.5rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      color: var(--color-text-main);
+    }
+
+    .sort-icon {
+      display: inline-block;
+      margin-left: 0.25rem;
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--color-text-main);
+    }
+
+    .page-btn.active {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/logo-white.png" alt="Fujairah Environment Authority Logo" style="height: 40px; object-fit: contain;">
+    </div>
+
+    <div class="nav-tabs">
+      <a href="live-data.html" class="nav-tab">Live Data</a>
+      <a href="analytics.html" class="nav-tab">Analytics</a>
+      <a href="data-capture.html" class="nav-tab active">Data Capture Rate</a>
+    </div>
+
+    <div class="nav-right" style="display: flex; gap: 1rem; align-items: center;">
+      <div class="dropdown">
+        <div class="user-pill" onclick="toggleDropdown(this)">
+          <div class="user-avatar">
+            <svg viewBox="0 0 24 24" fill="#666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          Jahangir Mian
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-header">Profile Settings</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item">Help Center</div>
+            <div class="dropdown-item highlight">Logout</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary">Back To Map</button>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="dashboard-header">
+    <div class="page-title">
+      <h1>Data Capture Rate</h1>
+      <p>24 Feb 2026 11:30:42</p>
+    </div>
+    <div class="filters-bar">
+      <!-- City Center Dropdown -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          City Center
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-header">Stations</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">City Centre <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">Mobile Station</div>
+            <div class="dropdown-item">Qidfa</div>
+            <div class="dropdown-item">Lafarge Cems</div>
+          </div>
+        </div>
+      </div>
+      <!-- Parameters Dropdown -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          All
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-header">Parameters</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">All <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">SO2</div>
+            <div class="dropdown-item">H2S</div>
+          </div>
+        </div>
+      </div>
+      <!-- Today Dropdown -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Today
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-header">Date</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">Today <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">Daily</div>
+            <div class="dropdown-item">Monthly</div>
+            <div class="dropdown-item">Yearly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="table-card">
+    
+    <div class="sub-tabs">
+      <button class="sub-tab active" id="tab-capture">Data Capture Rate</button>
+      <button class="sub-tab" id="tab-valid">Valid Data Capture</button>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>S.No <span class="sort-icon">↕</span></th>
+          <th>Station Name <span class="sort-icon">↕</span></th>
+          <th>Parameter <span class="sort-icon">↕</span></th>
+          <th>No.Of Expected Records <span class="sort-icon">↕</span></th>
+          <th id="col-records-type">No.Of Collected Records <span class="sort-icon">↕</span></th>
+          <th>Percent Availability <span class="sort-icon">↕</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>City Center</td><td>SO2, H2S</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>2</td><td>City Center</td><td>H2S</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>3</td><td>City Center</td><td>NO2</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>4</td><td>City Center</td><td>CO</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>5</td><td>City Center</td><td>O3</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>6</td><td>City Center</td><td>PM2.5</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>7</td><td>City Center</td><td>PM10</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>8</td><td>City Center</td><td>CH4</td><td>24</td><td>24</td><td>100.00</td></tr>
+        <tr><td>9</td><td>City Center</td><td>NMHC</td><td>24</td><td>24</td><td>100.00</td></tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button class="page-btn">&lt;</button>
+      <button class="page-btn">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn active">3</button>
+      <button class="page-btn">4</button>
+      <button class="page-btn">5</button>
+      <button class="page-btn">&gt;</button>
+    </div>
+
+  </div>
+  </div>
+
+  <script>
+    function toggleDropdown(element) {
+      document.querySelectorAll('.dropdown.active').forEach(d => {
+        if(d !== element.parentElement) d.classList.remove('active');
+      });
+      element.parentElement.classList.toggle('active');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabCapture = document.getElementById('tab-capture');
+      const tabValid = document.getElementById('tab-valid');
+      const colHeader = document.getElementById('col-records-type');
+
+      tabCapture.addEventListener('click', () => {
+        tabCapture.classList.add('active');
+        tabValid.classList.remove('active');
+        colHeader.innerHTML = 'No.Of Collected Records <span class="sort-icon">↕</span>';
+      });
+
+      tabValid.addEventListener('click', () => {
+        tabValid.classList.add('active');
+        tabCapture.classList.remove('active');
+        colHeader.innerHTML = 'No.Of Valid Records <span class="sort-icon">↕</span>';
+      });
+    });
+  </script>
+</body>
+</html>

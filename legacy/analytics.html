@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - AQMS</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Background inherited from main.css */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .page-title h1 {
+      font-size: 1.5rem;
+      color: var(--color-text-main);
+    }
+    
+    .page-title p {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .filters-bar {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .chart-card {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255,255,255,0.4);
+      position: relative;
+    }
+
+    .chart-controls {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      z-index: 10;
+    }
+
+    .toggle-group {
+      display: flex;
+      background: white;
+      border-radius: 9999px;
+      padding: 0.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .toggle-btn {
+      padding: 0.25rem 1rem;
+      border: none;
+      background: transparent;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .toggle-btn.active {
+      background: #f3f4f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/logo-white.png" alt="Fujairah Environment Authority Logo" style="height: 40px; object-fit: contain;">
+    </div>
+
+    <div class="nav-tabs">
+      <a href="live-data.html" class="nav-tab">Live Data</a>
+      <a href="analytics.html" class="nav-tab active">Analytics</a>
+      <a href="data-capture.html" class="nav-tab">Data Capture Rate</a>
+    </div>
+
+    <div class="nav-right" style="display: flex; gap: 1rem; align-items: center;">
+      <div class="dropdown">
+        <div class="user-pill" onclick="toggleDropdown(this)">
+          <div class="user-avatar">
+            <svg viewBox="0 0 24 24" fill="#666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          Jahangir Mian
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-header">Profile Settings</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item">Help Center</div>
+            <div class="dropdown-item highlight">Logout</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary">Back To Map</button>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="dashboard-header">
+    <div class="page-title">
+      <h1>Analytics</h1>
+      <p>24 Feb 2026 11:30:42</p>
+    </div>
+    <div class="filters-bar">
+      <!-- City Center Dropdown -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          City Center
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-header">Stations</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">City Centre <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">Mobile Station</div>
+            <div class="dropdown-item">Qidfa</div>
+            <div class="dropdown-item">Lafarge Cems</div>
+          </div>
+        </div>
+      </div>
+      <!-- Parameters Dropdown -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          SO2, H2S
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-header">Parameters</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">SO2, H2S <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">All Parameters</div>
+          </div>
+        </div>
+      </div>
+      <!-- Report Type -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          Daily Summary
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu">
+          <div class="dropdown-header">Report Type</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">Daily Summary <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">Hourly Summary</div>
+          </div>
+        </div>
+      </div>
+      <!-- Today Dropdown -->
+      <div class="dropdown">
+        <div class="filter-btn" onclick="toggleDropdown(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Today
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-header">Date</div>
+          <div class="dropdown-list">
+            <div class="dropdown-item selected">Today <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div class="dropdown-item">Daily</div>
+            <div class="dropdown-item">Monthly</div>
+            <div class="dropdown-item">Yearly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="chart-card">
+    <div class="chart-controls">
+      <div class="toggle-group">
+        <button class="toggle-btn active">Min</button>
+        <button class="toggle-btn">Max</button>
+        <button class="toggle-btn">Avg</button>
+      </div>
+      <button class="filter-btn" style="padding: 0.25rem 1rem; border-radius: 9999px;">⬇ Download ▾</button>
+    </div>
+    
+    <div style="height: 400px; width: 100%; margin-top: 2rem;">
+      <canvas id="analyticsChart"></canvas>
+    </div>
+    
+    <!-- Custom Legend below chart -->
+    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+        <span style="width: 12px; height: 12px; background: #84cc16; display: inline-block;"></span> SO2
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
+        <span style="width: 12px; height: 12px; background: #06b6d4; display: inline-block;"></span> H2S
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    function toggleDropdown(element) {
+      document.querySelectorAll('.dropdown.active').forEach(d => {
+        if(d !== element.parentElement) d.classList.remove('active');
+      });
+      element.parentElement.classList.toggle('active');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('analyticsChart').getContext('2d');
+      
+      // Mock data for the chart to resemble the screenshot
+      const labels = ['9:30PM', '10:00PM', '10:30PM', '11:00PM', '11:30PM', '12:00AM', '12:30AM', '1:00AM', '1:30AM', '2:00AM', '2:30AM', '3:00AM', '3:30AM'];
+      
+      // Generate some smooth random-looking curves
+      const dataSO2 = [50, 4, 60, 40, 100, 50, 40, 50, 30, 55, 40, 40, 105, 50, 15, 60, 30, 25, 60, 60, 40, 35, 105, 50, 50, 25, 40, 30];
+      const dataH2S = [15, 2, 45, 50, 40, 50, 50, 80, 70, 55, 40, 30, 25, 25, 20, 25, 40, 45, 30, 35, 25, 25, 30, 25, 25, 30, 35, 60];
+      
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['9:30PM', '', '10:00PM', '', '10:30PM', '', '11:00PM', '', '11:30PM', '', '12:00AM', '', '12:30AM', '', '1:00AM', '', '1:30AM', '', '2:00AM', '', '2:30AM', '', '3:00AM', '', '3:30AM'],
+          datasets: [
+            {
+              label: 'SO2',
+              data: dataSO2,
+              borderColor: '#84cc16',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.4, // Smooth curve
+              pointRadius: 0
+            },
+            {
+              label: 'H2S',
+              data: dataH2S,
+              borderColor: '#06b6d4',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.4,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false // We use custom legend below
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 120,
+              grid: {
+                color: 'rgba(0,0,0,0.05)',
+              },
+              border: {
+                display: false
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              border: {
+                color: 'rgba(0,0,0,0.2)'
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
