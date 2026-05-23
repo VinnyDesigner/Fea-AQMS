@@ -458,23 +458,57 @@ body.menu-open {
 
 .pollutant-card {
   background: white;
-  border-radius: 12px;
-  padding: 10px 6px 8px;
+  border-radius: 20px;
+  padding: 18px 12px 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  flex: 0 0 150px;
-  min-width: 150px;
+  flex: 0 0 130px;
+  min-width: 130px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 159, 172, 0.06);
 }
-.p-icon { width: 30px; height: 30px; margin-bottom: 2px; }
-.p-name { font-weight: 700; font-size: 0.7rem; color: #6b7280; }
-.p-val { font-size: 1.35rem; font-weight: 800; line-height: 1.1; color: #111; }
-.p-unit { font-size: 0.6rem; font-weight: 500; color: #9ca3af; }
-.p-status { height: 4px; width: 55%; border-radius: 9999px; margin-top: 6px; }
+.pollutant-card .p-icon { 
+  width: 48px; 
+  height: 48px; 
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+.pollutant-card .p-name { 
+  color: #4A4A4A;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 12px;
+}
+.pollutant-card .p-val { 
+  color: #000;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1; 
+}
+.pollutant-card .p-unit { 
+  color: rgba(74, 74, 74, 0.70);
+  text-align: center;
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.pollutant-card .p-status { 
+  height: 8px; 
+  width: 70%; 
+  border-radius: 9999px; 
+  margin-top: 24px; 
+}
 
 /* Bottom row: Wind + Env Grid + Map */
 .bottom-grid {
